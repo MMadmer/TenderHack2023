@@ -40,44 +40,34 @@ function fileQueryMatcher(recivedString) {
     case 'Инструкция по работе с банковскими гарантиями':
       return file1;
       break;
-    ////////
 
     case 'Инструкция по работе с машиночитаемыми доверенностями':
       return file2;
       break;
-    ////////
     case 'Инструкция по работе с Порталом для поставщика':
       return file3;
       break;
-    ////////
     case 'Инструкция по работе с сервисом Логистика':
       return file4;
       break;
-    ////////
     case 'Инструкция по созданию оферты и СТЕ':
       return file5;
       break;
-    ////////
     case 'Инструкция по формированию YML':
       return file6;
       break;
-    ////////
     case 'Инструкция по электронному актированию':
       return file7;
       break;
-    ////////
     case 'Описание сервиса загрузки исполнении из системы учета':
       return file8;
       break;
-    ////////
     case 'Регламент':
       return file9;
       break;
-    ////////
     case 'Руководство пользователя по импорту данных на УПД':
       return file10;
       break;
-    ////////
 
     default:
       return false;
@@ -86,7 +76,6 @@ function fileQueryMatcher(recivedString) {
 }
 
 ////Icons sections////
-// const smileEm = '\uD83D\uDE04';
 const smileEm = '😃';
 const ballonEm = '🎈';
 const presentEm = '🎁';
@@ -106,7 +95,6 @@ const vortexEm = '🌀';
 const inLoveEm = '😍';
 const cristmasTreeEm = '🎄';
 
-////Aviable Dates buttonts////
 const buttonAskQuestion = `${vortexEm} Поиск источника`;
 const buttonSearchSource = `${smileEm}  Задать вопрос`;
 
@@ -123,13 +111,8 @@ const actionKbd = {
       ],
     ],
     resize_keyboard: true,
-
-    // one_time_keyboard: true,
   }),
 };
-
-//////////
-/////////////
 
 const toMainMenuKbd = {
   reply_markup: JSON.stringify({
@@ -141,8 +124,6 @@ const toMainMenuKbd = {
 //Scenes
 
 ////////////main screen scene////////////////
-
-///////////////////////////////////
 const mainScreen = new Scenes.BaseScene('MAIN_SCREEN_SCENE');
 mainScreen.enter(async (ctx) => {
   await ctx.reply('Выберите опцию', actionKbd);
@@ -157,7 +138,6 @@ mainScreen.enter(async (ctx) => {
     } else if (ctx.message.text === buttonAskQuestion) {
       ctx.scene.enter('ASK_QUESTION_SCENE');
     } else if (ctx.message.text === buttonSearchSource) {
-      // ctx.reply('! SEARCH SOURCE');
       ctx.scene.enter('SEARCH_SOURCE_SCENE');
     } else {
       ctx.scene.reenter();
@@ -168,7 +148,6 @@ mainScreen.enter(async (ctx) => {
 //custom scenes
 
 /////////ASK QUESTION SCENE
-
 const askQuestionScene = new Scenes.BaseScene('ASK_QUESTION_SCENE');
 askQuestionScene.enter(async (ctx) => {
   await ctx.reply(`Задайте вопрос:`, toMainMenuKbd);
@@ -191,20 +170,15 @@ askQuestionScene.enter(async (ctx) => {
           },
         )
         .then(async (data) => {
-          // console.log(data.data.answer);
           const fileMacherString = data.data.answer.split('\n')[0];
           const isFileRecordExists = fileQueryMatcher(fileMacherString);
-          // console.log(isFileRecordExists + '!!!!!!');
           await ctx.reply(data.data.answer);
           ctx.reply('Ожидайте скачивания файла');
           if (isFileRecordExists !== false) {
             ctx.replyWithDocument({ source: isFileRecordExists });
           }
-          // ctx.reply(fileMacherString);
         })
         .catch((error) => console.log(error));
-
-      ////////////////////////////////////
 
       await ctx.scene.reenter();
     }
@@ -234,20 +208,14 @@ searchSourceScene.enter(async (ctx) => {
           },
         )
         .then((data) => {
-          // console.log(data.data.answer);
-          // ctx.reply(`Иcточник ${data.data.answer.split('\n')[0]}`);
           ctx.reply(data.data.answer);
         })
         .catch((error) => console.log(error));
-
-      ////////////////////////////////////
 
       await ctx.scene.reenter();
     }
   });
 });
-
-//////////////////
 
 //////Stages Sections//////
 const stage = new Scenes.Stage([
